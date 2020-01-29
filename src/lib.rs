@@ -1,4 +1,4 @@
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemBlock {
     slc: Box<[u8]>,
     size: (usize, usize),
@@ -88,7 +88,31 @@ impl MemBlock {
             for x in 0..(self.size.0) {
                 print!(" {:08X}", self.read((x, y)));
             }
-            println!("");
+            println!();
         }
+    }
+}
+
+impl std::ops::Deref for MemBlock {
+    type Target = [u8];
+    fn deref(&self) -> &Self::Target {
+        &self.slc
+    }
+}
+impl std::ops::DerefMut for MemBlock {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.slc
+    }
+}
+
+impl std::borrow::Borrow<[u8]> for MemBlock {
+    fn borrow(&self) -> &[u8] {
+        &self[..]
+    }
+}
+
+impl std::borrow::BorrowMut<[u8]> for MemBlock {
+    fn borrow_mut(&mut self) -> &mut [u8] {
+        &mut self[..]
     }
 }
